@@ -22,11 +22,11 @@ fn part1_ctf_style(input: &[usize]) -> Option<usize> {
 
 #[aoc(day1, part1)]
 fn part1(input: &[usize]) -> Option<usize> {
-    const BUCKETS_SIZE: usize = (SUM + 1) * 2;
+    const BUCKETS_SIZE: usize = SUM + 1;
     let mut buckets: [bool; BUCKETS_SIZE] = [false; BUCKETS_SIZE];
     for &n in input {
-        let match_index = (SUM - n) as usize;
-        if buckets[match_index as usize] {
+        let match_index = SUM - n;
+        if buckets[match_index] {
             return Some(match_index * n);
         } else {
             buckets[n] = true;
@@ -60,13 +60,12 @@ fn part2(input: &[usize]) -> Option<usize> {
     }
 
     for &n in input {
-        let match_index = (SUM - n) as usize;
+        let match_index = SUM - n;
         if match_index > SUM {
             continue;
         }
-        match buckets[match_index as usize] {
-            Some(tmp) => return Some(tmp * n),
-            _ => {}
+        if let Some(intermediate_product) = buckets[match_index] {
+            return Some(intermediate_product * n);
         }
     }
 
