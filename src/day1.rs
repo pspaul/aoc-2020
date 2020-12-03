@@ -1,5 +1,9 @@
 use aoc_runner_derive::{aoc, aoc_generator};
 use std::num::ParseIntError;
+use itertools::Itertools;
+use std::collections::HashSet;
+use std::ops::Range;
+use rand::Rng;
 
 const SUM: usize = 2020;
 
@@ -33,6 +37,11 @@ fn part1(input: &[usize]) -> Option<usize> {
         }
     }
     return None;
+}
+
+#[aoc(day1, part1, generic)]
+fn part1_generic(input: &[usize]) -> Option<usize> {
+    return part_generic(input, 2);
 }
 
 #[aoc(day1, part2, ctf_style)]
@@ -72,9 +81,54 @@ fn part2(input: &[usize]) -> Option<usize> {
     return None;
 }
 
+#[aoc(day1, part2, generic)]
+fn part2_generic(input: &[usize]) -> Option<usize> {
+    return part_generic(input, 3);
+}
+
+//#[aoc(day1, part2, k_6)]
+fn generic_test(input: &[usize]) -> Option<usize> {
+    let mut input = vec!();
+    let mut rng = rand::thread_rng();
+    let r: Range<usize> = 0..256;
+    for _ in r {
+        let num = rng.gen_range(200, 2019) + 1 as usize;
+        input.push(num);
+    }
+    input.append(vec![69, 187, 420, 1337, 7, 4, 3].as_mut());
+    return if let Some(solution) = part_generic(input.as_slice(), 6) {
+        println!("Solution: {}", solution);
+        Some(solution)
+    } else {
+        println!("No solution found");
+        None
+    }
+}
+
+fn part_generic(input: &[usize], k: usize) -> Option<usize> {
+    let set = input.iter().map(|&n| n).collect::<HashSet<usize>>();
+
+    input.iter()
+        .permutations(k - 1)
+        .find(|n_tuple| {
+            let mut sum = 0;
+            for &&n in n_tuple {
+                sum += n;
+            }
+            return sum <= SUM && set.contains(&(SUM - sum));
+        })
+        .map_or(None, |n_tuple| {
+            let sum = n_tuple.iter().map(|&&n| n).sum::<usize>();
+            let product = n_tuple.iter().map(|&&n| n).product::<usize>();
+            Some(product * (SUM - sum))
+        })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::ops::Range;
+    use rand::Rng;
 
     #[test]
     fn part1_example() {
@@ -82,6 +136,7 @@ mod tests {
         let output = 514579;
         assert_eq!(part1_ctf_style(input).unwrap(), output);
         assert_eq!(part1(input).unwrap(), output);
+        assert_eq!(part1_generic(input).unwrap(), output);
     }
     #[test]
     fn part2_example() {
@@ -89,5 +144,23 @@ mod tests {
         let output = 241861950;
         assert_eq!(part2_ctf_style(input).unwrap(), output);
         assert_eq!(part2(input).unwrap(), output);
+        assert_eq!(part2_generic(input).unwrap(), output);
+    }
+
+    #[test]
+    fn test_generic() {
+        let mut input = vec!();
+        let mut rng = rand::thread_rng();
+        let r: Range<usize> = 0..256;
+        for _ in r {
+            let num = rng.gen_range(200, 2019) + 1 as usize;
+            input.push(num);
+        }
+        input.append(vec![69, 187, 420, 1337, 7, 4, 3].as_mut());
+        if let Some(solution) = part_generic(input.as_slice(), 6) {
+            println!("Solution: {}", solution);
+        } else {
+            println!("No solution found");
+        }
     }
 }
