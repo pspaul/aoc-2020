@@ -2,8 +2,6 @@ use aoc_runner_derive::{aoc, aoc_generator};
 use std::num::ParseIntError;
 use itertools::Itertools;
 use std::collections::HashSet;
-use std::ops::Range;
-use rand::Rng;
 
 const SUM: usize = 2020;
 
@@ -84,25 +82,6 @@ fn part2(input: &[usize]) -> Option<usize> {
 #[aoc(day1, part2, generic)]
 fn part2_generic(input: &[usize]) -> Option<usize> {
     return part_generic(input, 3);
-}
-
-//#[aoc(day1, part2, k_6)]
-fn generic_test(input: &[usize]) -> Option<usize> {
-    let mut input = vec!();
-    let mut rng = rand::thread_rng();
-    let r: Range<usize> = 0..256;
-    for _ in r {
-        let num = rng.gen_range(200, 2019) + 1 as usize;
-        input.push(num);
-    }
-    input.append(vec![69, 187, 420, 1337, 7, 4, 3].as_mut());
-    return if let Some(solution) = part_generic(input.as_slice(), 6) {
-        println!("Solution: {}", solution);
-        Some(solution)
-    } else {
-        println!("No solution found");
-        None
-    }
 }
 
 fn part_generic(input: &[usize], k: usize) -> Option<usize> {
