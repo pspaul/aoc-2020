@@ -12,7 +12,7 @@ impl From<char> for Cell {
         match symbol {
             '.' => Cell::Open,
             '#' => Cell::Tree,
-            _ => unreachable!()
+            _ => unreachable!(),
         }
     }
 }
@@ -109,8 +109,7 @@ impl<'a> Iterator for MapIterator<'a> {
 }
 
 fn count_trees_on_slope(map: &Map, slope_dx: usize, slope_dy: usize) -> usize {
-    map
-        .into_iter()
+    map.into_iter()
         .slope(slope_dx, slope_dy)
         .filter(|c| **c == Cell::Tree)
         .count()
