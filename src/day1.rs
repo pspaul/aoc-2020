@@ -1,7 +1,7 @@
 use aoc_runner_derive::{aoc, aoc_generator};
-use std::num::ParseIntError;
 use itertools::Itertools;
 use std::collections::HashSet;
+use std::num::ParseIntError;
 
 const SUM: usize = 2020;
 
@@ -14,7 +14,7 @@ fn parse_input_day1(input: &str) -> Result<Vec<usize>, ParseIntError> {
 fn part1_ctf_style(input: &[usize]) -> Option<usize> {
     for &a in input {
         for &b in input {
-            if a + b  == SUM {
+            if a + b == SUM {
                 return Some(a * b);
             }
         }
@@ -87,7 +87,8 @@ fn part2_generic(input: &[usize]) -> Option<usize> {
 fn part_generic(input: &[usize], k: usize) -> Option<usize> {
     let set = input.iter().map(|&n| n).collect::<HashSet<usize>>();
 
-    input.iter()
+    input
+        .iter()
         .permutations(k - 1)
         .find(|n_tuple| {
             let mut sum = 0;
@@ -106,8 +107,8 @@ fn part_generic(input: &[usize], k: usize) -> Option<usize> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::ops::Range;
     use rand::Rng;
+    use std::ops::Range;
 
     #[test]
     fn part1_example() {
@@ -128,7 +129,7 @@ mod tests {
 
     #[test]
     fn test_generic() {
-        let mut input = vec!();
+        let mut input = vec![];
         let mut rng = rand::thread_rng();
         let r: Range<usize> = 0..256;
         for _ in r {
