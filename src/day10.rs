@@ -92,10 +92,10 @@ fn part2(adapters: &DirectedAcyclicGraph) -> usize {
             for neighbor in neighbors {
                 permutations += factors.get(neighbor).unwrap();
             }
-            factors.insert(*adapter, permutations);
         } else {
-            factors.insert(*adapter, 1);
+            permutations = 1;
         }
+        factors.insert(*adapter, permutations);
     }
 
     permutations
@@ -160,10 +160,10 @@ mod tests {
 
     #[test]
     fn part2_small_example() {
-        assert_eq!(part2(&parse_input_day10(INPUT_SMALL)), Some(8));
+        assert_eq!(part2(&parse_input_day10(INPUT_SMALL)), 8);
     }
     #[test]
     fn part2_large_example() {
-        assert_eq!(part2(&parse_input_day10(INPUT_LARGE)), Some(19208));
+        assert_eq!(part2(&parse_input_day10(INPUT_LARGE)), 19208);
     }
 }
