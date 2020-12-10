@@ -72,7 +72,11 @@ fn find_first_bad_num_sliced(input: &Vec<usize>, preamble_size: usize) -> Option
     for (i, n) in input.iter().enumerate() {
         if i >= preamble_size {
             let window = &input[(i - preamble_size)..i];
-            if window.iter().find(|m| **m <= *n && lookup.contains(&(*n - **m))).is_none() {
+            if window
+                .iter()
+                .find(|m| **m <= *n && lookup.contains(&(*n - **m)))
+                .is_none()
+            {
                 return Some(*n);
             }
 
@@ -176,7 +180,10 @@ mod tests {
 
     #[test]
     fn part1_sliced_example() {
-        assert_eq!(find_first_bad_num_sliced(&parse_input_day9(INPUT), 5), Some(127));
+        assert_eq!(
+            find_first_bad_num_sliced(&parse_input_day9(INPUT), 5),
+            Some(127)
+        );
     }
 
     #[test]
@@ -185,7 +192,9 @@ mod tests {
     }
     #[test]
     fn part2_sliding_window_example() {
-        assert_eq!(find_weakness_sliding_window(&mut parse_input_day9(INPUT), 5), Some(62));
+        assert_eq!(
+            find_weakness_sliding_window(&mut parse_input_day9(INPUT), 5),
+            Some(62)
+        );
     }
 }
-

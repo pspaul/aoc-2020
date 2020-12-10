@@ -92,8 +92,7 @@ impl VM {
                     self.accumulator += instruction.operand;
                 }
                 OpCode::Jmp => {
-                    self.address =
-                        (self.address as isize + instruction.operand - 1) as usize;
+                    self.address = (self.address as isize + instruction.operand - 1) as usize;
                 }
             }
 

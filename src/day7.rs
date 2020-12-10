@@ -1,7 +1,7 @@
 use aoc_runner_derive::{aoc, aoc_generator};
-use std::collections::{HashMap, HashSet};
 use lazy_static::lazy_static;
 use regex::Regex;
+use std::collections::{HashMap, HashSet};
 
 struct BagRules {
     /// all the bags
@@ -27,9 +27,14 @@ struct Bag {
 }
 
 lazy_static! {
-    static ref LINE_PATTERN: Regex = Regex::new(r"^(?P<color>\w+ \w+) bags contain (?P<first>[\w ]+ bags?)(?:, (?P<remaining>[,\w ]+))?\.$").unwrap();
-    static ref LINE_REMAINING_PATTERN: Regex = Regex::new(r", (?P<remaining>[\w ]+ bags?)").unwrap();
-    static ref QUANTITY_PATTERN: Regex = Regex::new(r"(?P<quantity>\d+) (?P<color>\w+ \w+) bags?").unwrap();
+    static ref LINE_PATTERN: Regex = Regex::new(
+        r"^(?P<color>\w+ \w+) bags contain (?P<first>[\w ]+ bags?)(?:, (?P<remaining>[,\w ]+))?\.$"
+    )
+    .unwrap();
+    static ref LINE_REMAINING_PATTERN: Regex =
+        Regex::new(r", (?P<remaining>[\w ]+ bags?)").unwrap();
+    static ref QUANTITY_PATTERN: Regex =
+        Regex::new(r"(?P<quantity>\d+) (?P<color>\w+ \w+) bags?").unwrap();
 }
 
 fn parse_bag_rule(line: &str) -> Option<Bag> {
@@ -37,7 +42,7 @@ fn parse_bag_rule(line: &str) -> Option<Bag> {
 
     let mut bag = Bag {
         color: cap.name("color")?.as_str().to_string(),
-        inner_bags: vec!(),
+        inner_bags: vec![],
     };
 
     let first_inner = cap.name("first")?.as_str();
@@ -47,9 +52,12 @@ fn parse_bag_rule(line: &str) -> Option<Bag> {
 
         if let Some(remaining) = cap.name("remaining") {
             for nth_inner in QUANTITY_PATTERN.captures_iter(remaining.as_str()) {
-                let (quantity, color) = (nth_inner["quantity"].parse::<usize>().unwrap(), nth_inner["color"].to_string());
+                let (quantity, color) = (
+                    nth_inner["quantity"].parse::<usize>().unwrap(),
+                    nth_inner["color"].to_string(),
+                );
                 bag.inner_bags.push((quantity, color));
-            };
+            }
         }
     }
 
@@ -58,7 +66,11 @@ fn parse_bag_rule(line: &str) -> Option<Bag> {
 
 fn parse_bag_quantity(s: &str) -> Option<(usize, &str)> {
     let cap = QUANTITY_PATTERN.captures(s)?;
-    let quantity = cap.name("quantity")?.as_str().parse::<usize>().map_or(None, Some)?;
+    let quantity = cap
+        .name("quantity")?
+        .as_str()
+        .parse::<usize>()
+        .map_or(None, Some)?;
     let color = cap.name("color")?.as_str();
     Some((quantity, color))
 }
@@ -94,7 +106,12 @@ fn part1(rules: &BagRules) -> usize {
     let mut counter = 0;
 
     // start at target and go up the tree
-    rules.contained_by_lookup.get(target).unwrap().iter().for_each(|item| stack.push(item));
+    rules
+        .contained_by_lookup
+        .get(target)
+        .unwrap()
+        .iter()
+        .for_each(|item| stack.push(item));
 
     while let Some((_cur_count, cur_bag)) = stack.pop() {
         if visited.contains(cur_bag) {
