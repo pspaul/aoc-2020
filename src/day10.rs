@@ -90,7 +90,7 @@ fn part2(adapters: &DirectedAcyclicGraph) -> usize {
         if let Some(neighbors) = adapters.edges.get(adapter) {
             permutations = 0;
             for neighbor in neighbors {
-                permutations += factors.get(neighbor)?;
+                permutations += factors.get(neighbor).unwrap();
             }
             factors.insert(*adapter, permutations);
         } else {
